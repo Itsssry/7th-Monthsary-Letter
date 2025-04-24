@@ -1,0 +1,230 @@
+:root { 
+  /* Define CSS variables for consistent theming */
+  --primary: #f97ee1;
+  --bg-color: #fae1dd; /* Page background color */
+  --bg-envelope-color: #8802b0; /* Main envelope background */
+  --envelope-tab: #8802b0; /* Top triangle flap */
+  --envelope-cover: #ba32ec; /* Front cover of the envelope */
+  --shadow-color: rgba(0, 0, 0, 0.3); /* General shadow color */
+  --txt-color: #003049; /* Text color inside the letter */
+  --heart-color: #d62828; /* Heart shape color */
+}
+
+body {
+  /* Basic body layout and alignment */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: var(--bg-color); /* Use defined background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  /* Container that centers the envelope */
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.container > .envelope-wrapper {
+  /* Styling the wrapper for the envelope */
+  background: var(--bg-envelope-color);
+  box-shadow: 0 0 40px var(--shadow-color);
+}
+
+.envelope-wrapper > .envelope {
+  /* Main envelope box */
+  position: relative;
+  width: 300px;
+  height: 230px;
+}
+
+.envelope-wrapper > .envelope::before {
+  /* Top triangle flap of the envelope */
+  content: "";
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  border-top: 130px solid var(--envelope-tab);
+  border-right: 150px solid transparent;
+  border-left: 150px solid transparent;
+  transform-origin: top;
+  transition: all 0.5s ease-in-out 0.7s;
+}
+
+.envelope-wrapper > .envelope::after {
+  /* Front triangle face of the envelope */
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 0px;
+  height: 0px;
+  border-top: 130px solid transparent;
+  border-right: 150px solid var(--envelope-cover);
+  border-bottom: 100px solid var(--envelope-cover);
+  border-left: 150px solid var(--envelope-cover);
+}
+
+.envelope > .letter {
+  /* The hidden letter inside the envelope */
+  position: absolute;
+  bottom: 0;
+  left: 3%; /* Center horizontally */
+  
+  width: 87%;
+  height: 85%;
+  background: #eae2b7; /* Letter background */
+  text-align: left;
+  transition: all 1s ease-in-out;
+  box-shadow: -5px -5px 100px rgba(0, 0, 0, 0.4);
+  padding: 15px 10px;
+  font-size: 1px;
+  z-index: 1; /* Default z-index */
+}
+
+
+.letter .text span {
+  font-size: 6px; /* Smaller "My Babe" text */
+  font-weight: bold;
+}
+
+.letter .text p {
+  font-size: 3px; /* Smaller paragraph text */
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+.envelope > .letter:before {
+  /* Dotted border inside the letter */
+  content: "";
+  position: absolute;
+  border: 3px dotted var(--txt-color);
+  width: 270px;
+  height: 215px;
+  left: 5px;
+  top: 5px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.heart {
+  /* Small heart placed at the center */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  background: var(--heart-color);
+  z-index: 4;
+  transform: translate(-50%, -20%) rotate(45deg);
+  transition: transform 0.5s ease-in-out 1s;
+  box-shadow: 0 1px 6px var(--shadow-color);
+  cursor: pointer;
+}
+
+.heart:before, 
+.heart:after {
+  /* Circles forming the top of the heart */
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: var(--heart-color);
+  border-radius: 50%;
+}
+
+.heart:before {
+  /* Top-left circle of the heart */
+  top: -7.5px;
+}
+
+.heart:after {
+  /* Top-right circle of the heart */
+  right: 7.5px;
+}
+
+.flap > .envelope:before {
+  /* Animation to open the envelope flap */
+  transform: rotateX(180deg);
+  z-index: 0;
+}
+
+.flap > .envelope > .letter {
+  /* Animation to pull the letter out, scale, and appear on top */
+  bottom: 100px;
+  transform: scale(1.5);
+  transition-delay: 1s;
+  z-index: 99; /* Bring the letter above all */
+}
+
+.flap > .heart {
+  /* Rotate the heart when the envelope is open */
+  transform: rotate(90deg);
+  transition-delay: 0.4s;
+}
+
+/* === Floating Hearts Animation Background === */
+.floating-hearts {
+  /* Container for floating hearts */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.floating-heart {
+  /* Individual floating heart */
+  position: absolute;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  background: var(--heart-color);
+  transform: rotate(45deg);
+  border-radius: 50% 5% 0 0;
+  animation: floatHearts 5s linear infinite;
+  opacity: 0.7;
+  z-index: 0;
+}
+
+.floating-heart::before,
+.floating-heart::after {
+  /* Circles forming heart lobes */
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: var(--heart-color);
+  border-radius: 50%;
+}
+
+.floating-heart::before {
+  /* Top circle of left lobe */
+  top: -15px;
+  left: 0;
+}
+
+.floating-heart::after {
+  /* Top circle of right lobe */
+  top: 0;
+  left: -15px;
+}
+
+@keyframes floatHearts {
+  /* Floating animation for hearts */
+  0% {
+    bottom: 0;
+    opacity: 1;
+    transform: translateX(0) rotate(45deg) scale(1);
+  }
+  100% {
+    bottom: 100%;
+    opacity: 0;
+    transform: translateX(30px) rotate(45deg) scale(1.5);
+  }
+}
