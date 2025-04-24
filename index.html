@@ -78,5 +78,49 @@
       document.querySelector(".container").classList.add("flap");
     });
   </script>  
+  <audio id="bg-music" autoplay loop muted>
+    <source src="BG.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <div style="position: fixed; bottom: 20px; right: 20px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 999;">
+    <button id="playPauseBtn">🔈 Play</button>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" />
+  </div>
+  
+  <script>
+    const audio = document.getElementById("bg-music");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const volumeSlider = document.getElementById("volumeSlider");
+  
+    let isPlaying = false;
+  
+    window.addEventListener("click", () => {
+      if (!isPlaying) {
+        audio.muted = false;
+        audio.play().then(() => {
+          isPlaying = true;
+          playPauseBtn.textContent = "🔊 Pause";
+        }).catch((err) => {
+          console.error("Autoplay error:", err);
+        });
+      }
+    });
+  
+    playPauseBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.textContent = "🔊 Pause";
+      } else {
+        audio.pause();
+        playPauseBtn.textContent = "🔈 Play";
+      }
+    });
+  
+    volumeSlider.addEventListener("input", () => {
+      audio.volume = volumeSlider.value;
+    });
+  </script>
+  
 </body>
 </html>
